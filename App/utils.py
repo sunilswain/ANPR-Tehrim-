@@ -9,8 +9,7 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv('App/os.env')
-
-def isExists(plate_val):
+def getDataFrame():
     DRIVER = os.getenv('DRIVER')
     SERVER = os.getenv('SERVER')
     DATABASE = os.getenv('DATABASE')
@@ -23,8 +22,13 @@ def isExists(plate_val):
     connection_url = URL.create('mssql+pyodbc', query={"odbc_connect":connection_string})
 
     engine = create_engine(connection_url)
+
     df = pd.read_sql_table('PlateDetails', engine)
 
+    return df
+
+def isExists(plate_val, df):
+    """Returns the number plate table as dataframe"""
     plates = list(df['Vehicle_Number'])
 
     if plate_val in plates:
@@ -38,10 +42,19 @@ def getPaddle():
     ocr = PaddleOCR(use_angle_cls=True, lang='en')
     return ocr
 
+def getModel():
+    """Returns our Object Detetion Model"""
+    model = YOLO('App/best_nano.pt')
+    return model
+
+
 # Function to extract number plate images
 def extractNumberPlates(frame):
     """Returns cropped pictures of number plates if present"""
-    model = YOLO('App/best_1.pt')
+    model = getModel()
+    if frame.shape[2] > 3:
+        frame = frame[:, :, :3]
+
     result = model.predict(frame)[0]
     numPlates = []
     for object in result.boxes:
@@ -56,9 +69,8 @@ def extractNumberPlates(frame):
     return numPlates
 
 # Recognize the characters inside number plate
-def recogFunc(img):
+def recogFunc(img, paddle):
     """Predicts the number plate value"""
-    paddle = getPaddle()
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     # _, otsu_thresh = cv2.threshold(gray, 200, 255, cv2.THRESH_BINARY+cv2.THRESH_OTSU)
     # img_binary_lp_er = cv2.erode(otsu_thresh, (3,3))
