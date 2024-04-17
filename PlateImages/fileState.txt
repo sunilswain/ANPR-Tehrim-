@@ -1,0 +1,5 @@
+C:\Users\sunilswain\Programming\Python\ANPRWeb\PlateImages\20240410-202830.jpg	1
+C:\Users\sunilswain\Programming\Python\ANPRWeb\PlateImages\20240411-043802.jpg	1
+C:\Users\sunilswain\Programming\Python\ANPRWeb\PlateImages\20240411-043815.jpg	1
+C:\Users\sunilswain\Programming\Python\ANPRWeb\PlateImages\20240411-043849.jpg	1
+C:\Users\sunilswain\Programming\Python\ANPRWeb\PlateImages\20240411-043912.jpg	1

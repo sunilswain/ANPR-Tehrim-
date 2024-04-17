@@ -1,0 +1,19 @@
+# Database Configurations
+DRIVER={ODBC Driver 17 for SQL Server}
+SERVER=mlopserver.database.windows.net
+DATABASE=mlops
+USERNAME=mlopsadmin
+PASSWORD=E$$pl@1234#
+
+# Model Configurations
+DETECTION_MODEL_PATH=C:\Users\sunilswain\Programming\Python\ANPRWeb\Models\Detector.pt
+RECOGNIZER_MODEL_DIR=C:\Users\sunilswain\Programming\Python\ANPRWeb\Models\pp_rec
+
+# Requirements
+REQUIREMENTS_PATH=C:\Users\sunilswain\Programming\Python\ANPRWeb\requirements.txt
+
+# Logs
+LOG_FILE_PATH=C:\Users\sunilswain\Programming\Python\ANPRWeb\logs.txt
+
+# Path for storing plate images
+STORAGE_PLATE_DIR=C:\Users\sunilswain\Programming\Python\ANPRWeb\PlateImages

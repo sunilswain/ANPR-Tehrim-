@@ -1,0 +1,11 @@
+Release-Note
+------------
+To run the flask app use `python App/app.py` & make sure you've cd'd into the parent directory of App.
+
+Note: This  app uses ngrok's credentials to host the api while using your PC as a server
+- To setup ngrok, follow `ngrok introduction documentation.`
+
+What's new?
+-----------
+- Added bat files
+- Added automated package installer

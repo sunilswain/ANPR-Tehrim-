@@ -1,0 +1,5 @@
+PlateImages/20240410-202830.jpg	[{"transcription": "OD02BV2170", "points": [[47, 93], [428, 35], [439, 111], [58, 169]], "difficult": false}]
+PlateImages/20240411-043802.jpg	[{"transcription": "0D03", "points": [[85, 27], [248, 11], [255, 82], [92, 98]], "difficult": false}, {"transcription": "W9140", "points": [[74, 104], [270, 86], [275, 152], [80, 169]], "difficult": false}]
+PlateImages/20240411-043815.jpg	[{"transcription": "OD14", "points": [[174, 124], [688, 34], [726, 213], [193, 305]], "difficult": false}, {"transcription": "G0818", "points": [[189, 314], [747, 222], [790, 407], [212, 495]], "difficult": false}]
+PlateImages/20240411-043849.jpg	[{"transcription": "OD03", "points": [[117, 50], [333, 21], [346, 110], [130, 139]], "difficult": false}, {"transcription": "W9140", "points": [[110, 152], [369, 116], [381, 199], [123, 235]], "difficult": false}]
+PlateImages/20240411-043912.jpg	[{"transcription": "OD33", "points": [[177, 42], [841, 42], [841, 256], [177, 256]], "difficult": false}, {"transcription": "P7877", "points": [[186, 276], [828, 276], [828, 503], [186, 503]], "difficult": false}]
