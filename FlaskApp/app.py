@@ -58,7 +58,8 @@ def extract_number_plates():
             except Exception as e:
                 print(f"Failed to save the image.. due to Error: {e}")
     else:
-        insertStatus('NOT DETECTED')
+        # insertStatus('NOT DETECTED')
+        pass
 
     # Return the list of plate information as response
     return jsonify({'plates': plate_info})

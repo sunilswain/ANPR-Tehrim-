@@ -8,13 +8,12 @@ import pandas as pd
 import time
 
 # Loading config
-config_file_path = r'C:\Users\sunilswain\Programming\Python\ANPRWeb\Config.txt'
+config_file_path = r'C:\Users\sushi\Programming\Sunil\Python\ANPRSysApi\Config.txt'
 with open(config_file_path, 'r') as file:
     file_contents = file.read()
 
 paths=[i[i.find("=")+1:] for i in file_contents.split('\n') if i!="" and  not i.startswith("#")]
-(DRIVER,SERVER,DATABASE,USERNAME, PASSWORD, DETECTOR_MODEL_PATH, RECOGNIZER_MODEL_DIR, REQUIREMENTS_PATH, LOG_FILE_PATH, STORAGE_PLATE_DIR) = paths
-print(f"{DRIVER}, {USERNAME}")
+(DB_PATH, DETECTOR_MODEL_PATH, RECOGNIZER_MODEL_DIR, REQUIREMENTS_PATH, LOG_FILE_PATH, STORAGE_PLATE_DIR) = paths
 
 def saveImg(image):
     timestr = time.strftime("%Y%m%d-%H%M%S")
@@ -24,11 +23,10 @@ def saveImg(image):
 def getEngine():
     """Returns a database engine"""
 
-    connection_string = f"Driver={DRIVER};Server={SERVER};Database={DATABASE};uid={USERNAME};pwd={PASSWORD}"
-
-    connection_url = URL.create('mssql+pyodbc', query={"odbc_connect":connection_string})
-
-    engine = create_engine(connection_url)
+    DB_PATH = ""
+    DB_PATH = DB_PATH.replace('\\', '/')
+    print(DB_PATH)
+    engine = create_engine(f"sqlite:///company.db")
 
     return engine
 
@@ -66,14 +64,14 @@ def isExists(plate_val, df):
     plates = list(df['Vehicle_Number'])
 
     if plate_val in plates:
-        insertStatus(f'DETECTED {plate_val}')
+        # insertStatus(f'DETECTED {plate_val}')
         return df.loc[df['Vehicle_Number']==plate_val
 ][['EmployeeID', 'EmployeeName', 'Model_Name']].to_dict(orient='records')
 #         return df.loc[df['Vehicle_Number']==plate_val
 # ][['Emp_Id', 'Owner_Name', 'Model_Name']].to_dict(orient='records')
     else:
-        insertStatus(f'{plate_val} IS NOT REGISTERED')
-
+        # insertStatus(f'{plate_val} IS NOT REGISTERED')
+        pass
     return False
 
 def getPaddle():
@@ -108,59 +106,6 @@ def extractNumberPlates(frame):
             )
     return numPlates
 
-# Function to extract number plate images
-# def extractNumberPlates(frame):
-    """Returns cropped pictures of number plates if present"""
-    model = getModel()
-
-    if frame.shape[2] > 3:
-        frame = frame[:, :, :3]
-
-    results = model.predict(frame)[0]
-    numPlates = []
-    for object in results:
-        segmented_coords = np.array(object.masks.xy, dtype=np.int32)
-        # Create a mask from segmented coordinates
-        mask = np.zeros(frame.shape[:2], dtype=np.uint8)
-        cv2.fillPoly(mask, [segmented_coords], (255, 255, 255))
-
-        # Extract the segmented part of the image using the mask
-        segmented_image = cv2.bitwise_and(frame, frame, mask=mask)
-
-        # Find the bounding box of the segmented area
-        contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-        x, y, w, h = cv2.boundingRect(contours[0])
-
-        # Crop the segmented part of the image using the bounding box
-        cropped_image = segmented_image[y:y+h, x:x+w]
-
-        numPlates += [cropped_image]
-    return numPlates
-
-# # Recognize the characters inside number plate
-# def recogFunc(img, paddle):
-#     """Predicts the number plate value"""
-#     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-#     # _, otsu_thresh = cv2.threshold(gray, 200, 255, cv2.THRESH_BINARY+cv2.THRESH_OTSU)
-#     # img_binary_lp_er = cv2.erode(otsu_thresh, (3,3))
-#     # img_binary_lp = cv2.dilate(img_binary_lp_er, (3,3))  
-#     result = paddle.ocr(gray, cls=True)
-#     print(result)
-#     plate_val = ""
-    
-#     if result != [None]:
-#         for rec in result[0]:
-#             if len(rec[1][0]) > 3:
-#                 plate_val += rec[1][0]
-
-#     if len(plate_val) > 0:
-#         if plate_val[0] == '0':
-#             plate_val = 'O'+plate_val[1:]
-#         if plate_val[1] == '0':
-#             plate_val = plate_val[:1]+'D'+plate_val[2:]
-#         if plate_val[2] == 'O':
-#             plate_val = plate_val[:2]+'0'+plate_val[3:]
-#     return plate_val, result
 
 def recogFunc(img, paddle):
     """Predicts the number plate value"""
@@ -169,9 +114,10 @@ def recogFunc(img, paddle):
     # img_binary_lp_er = cv2.erode(otsu_thresh, (3,3))
     # img_binary_lp = cv2.dilate(img_binary_lp_er, (3,3))  
     results = paddle.ocr(gray, cls=True)[0]
-    img_height, img_width = img.shape
+    print(img.shape)
+    img_height, img_width, _ = img.shape
 
-    print(result)
+
     plate_val = ""
     
     if results != None:
@@ -191,4 +137,4 @@ def recogFunc(img, paddle):
             plate_val = plate_val[:1]+'D'+plate_val[2:]
         if plate_val[2] == 'O':
             plate_val = plate_val[:2]+'0'+plate_val[3:]
-    return plate_val, result
+    return plate_val, results

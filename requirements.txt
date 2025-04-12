@@ -14,3 +14,4 @@ paddleocr==2.7.3
 torch==2.2.2
 ultralytics==8.1.17
 paddlepaddle==2.6.1
+streamlit==1.44.1
